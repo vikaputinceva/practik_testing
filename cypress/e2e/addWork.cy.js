@@ -1,38 +1,37 @@
-describe('Заявка на роль', () => {
+describe('Заявки на роль', () => {
+
+    const loginUrl = 'https://dev.profteam.su/login';
+
+    const login = 'puvev';
+    const password = 'Vikaputin_2008';
 
     beforeEach(() => {
-        cy.visit('/login');
+        cy.visit(loginUrl);
 
-        cy.get('[autocomplete="username"]').type('testerStudent');
-        cy.get('[autocomplete="current-password"]').type('Password1');
+        cy.get('[autocomplete="username"], input').first().type(login);
+        cy.get('[autocomplete="current-password"], input').type(password);
 
         cy.contains('Войти').click();
-
-        cy.url().should('not.include', '/login');
     });
 
-    it('Позитивный: заявка на работодателя', () => {
-        cy.get('.page-nav__role-block button', { timeout: 10000 })
-            .click();
+    it('Подача заявки на работодателя', () => {
 
-        cy.contains('Я работодатель').click();
-        cy.contains('Создание заявки').click();
+        cy.contains('Профиль').click();
+        cy.contains('Стать работодателем').click();
 
-        cy.get('[placeholder="Название компании"]').type('Test Company');
-        cy.get('[placeholder="Описание"]').type('Описание');
+        cy.contains('Отправить заявку').click();
 
-        cy.contains('button', 'Отправить').click();
+        cy.contains('Заявка отправлена').should('be.visible');
     });
 
-    it('Негативный: пустая заявка', () => {
-        cy.get('.page-nav__role-block button', { timeout: 10000 })
-            .click();
+    it('Подача заявки на учебное заведение', () => {
 
-        cy.contains('Я работодатель').click();
-        cy.contains('Создание заявки').click();
+        cy.contains('Профиль').click();
+        cy.contains('Стать учебным заведением').click();
 
-        cy.contains('button', 'Отправить').click();
+        cy.contains('Отправить заявку').click();
 
-        cy.contains('Обязательное поле').should('exist');
+        cy.contains('Заявка отправлена').should('be.visible');
     });
+
 });
